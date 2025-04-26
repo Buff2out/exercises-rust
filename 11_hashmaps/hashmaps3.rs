@@ -15,9 +15,26 @@ struct TeamScores {
     goals_conceded: u8,
 }
 
+
+// пытался реализовать лайфтаймы, не вышло, мб в следующий раз.
+
+// trait ScoreManager <'a> {
+//     fn fill_score(&'a mut self, team_name: &'a str, goals: u8, conceded: u8);
+// }
+
+// impl <'a> ScoreManager<'a> for HashMap<&'a str, TeamScores> {
+//     fn fill_score(&'a mut self, team_name: &'a str, goals: u8, conceded: u8) {
+//         let s: &mut TeamScores = self.entry(team_name).or_default();
+//         s.goals_scored += goals;
+//         s.goals_conceded += conceded;
+//     }
+// }
+    
+
+
 fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
     // The name of the team is the key and its associated struct is the value.
-    let mut scores = HashMap::new();
+    let mut scores = HashMap::<&str, TeamScores>::new();
 
     for line in results.lines() {
         let mut split_iterator = line.split(',');
@@ -31,6 +48,29 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
         // Keep in mind that goals scored by team 1 will be the number of goals
         // conceded by team 2. Similarly, goals scored by team 2 will be the
         // number of goals conceded by team 1.
+
+        /*
+        
+            scores.fill_score(team_1_name, team_1_score, team_2_score);
+            scores.fill_score(team_2_name, team_2_score, team_1_score);
+        
+        */
+        scores.entry(team_1_name)
+            .or_default() // Создаёт TeamScores::default(), если команды нет
+            .goals_scored += team_1_score;
+
+        scores.entry(team_1_name)
+            .or_default()
+            .goals_conceded += team_2_score; // Пропущенные team_1 = забитые team_2
+
+        // Для team_2:
+        scores.entry(team_2_name)
+            .or_default()
+            .goals_scored += team_2_score;
+
+        scores.entry(team_2_name)
+            .or_default()
+            .goals_conceded += team_1_score; // Пропущенные team_2 = забитые team_1
     }
 
     scores

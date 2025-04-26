@@ -1,5 +1,10 @@
 // TODO: Fix the function body without changing the signature.
-fn square(num: i32) -> i32 {
+fn square<T>(num: T) -> T
+where
+    T: Copy
+    + std::ops::Mul<Output = T>
+    + From<i32>,
+{
     num * num
 }
 

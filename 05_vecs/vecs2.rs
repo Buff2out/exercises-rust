@@ -1,7 +1,14 @@
-fn vec_loop(input: &[i32]) -> Vec<i32> {
+fn vec_loop<T>(input: &[T]) -> Vec<T> 
+where
+T: Copy
++ std::ops::Mul<Output = T>
++ From<i32>,
+{
     let mut output = Vec::new();
 
     for element in input {
+        let res_mul = *element*2.into();
+        output.push(res_mul);
         // TODO: Multiply each element in the `input` slice by 2 and push it to
         // the `output` vector.
     }
@@ -24,7 +31,7 @@ fn vec_map(input: &[i32]) -> Vec<i32> {
     input
         .iter()
         .map(|element| {
-            // ???
+            element * 2
         })
         .collect()
 }

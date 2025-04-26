@@ -10,7 +10,20 @@
 
 // TODO: Write a function that calculates the price of an order of apples given
 // the quantity bought.
-// fn calculate_price_of_apples(???) -> ??? { ??? }
+fn calculate_price_of_apples<T>(apple_count: T) -> T
+where 
+    T: Copy
+    + std::ops::Mul<Output = T>
+    + std::cmp::PartialOrd
+    + From<i32>,
+{
+    let cost: T = if apple_count > 40.into() {
+        apple_count 
+    } else {
+        apple_count * 2.into()
+    };
+    cost
+}
 
 fn main() {
     // You can optionally experiment here.
